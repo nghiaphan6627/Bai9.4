@@ -2,25 +2,26 @@ package test.java;
 
 import org.junit.jupiter.api.Test;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MatrixTest {
 
     @Test
-    void testFilePathRequirementsStep2() {
-        System.out.println("--- THỰC HIỆN YÊU CẦU 2: CỐ TÌNH TẠO LỖI ---");
-        System.out.println("Hệ điều hành hiện tại: " + System.getProperty("os.name"));
+    void testFilePathRefactored() {
+        System.out.println("--- BƯỚC 3: TÁI CẤU TRÚC (REFACTOR) THÀNH CÔNG ---");
+        System.out.println("Hệ điều hành: " + System.getProperty("os.name"));
 
-        // Sử dụng định dạng gạch chéo ngược (\) cứng của Windows
-        // Windows sẽ hiểu đây là đường dẫn thư mục.
-        // Ubuntu và macOS sẽ hiểu đây là một tên file bình thường (và không tìm thấy).
-        String hardcodedWindowsPath = "src\\test\\resources\\data.txt";
-        File file = new File(hardcodedWindowsPath);
+        // Sử dụng Paths.get thay vì viết dấu gạch chéo thủ công
+        // API này sẽ tự động hỏi OS để dùng dấu gạch phù hợp
+        Path safePath = Paths.get("src", "test", "resources", "data.txt");
+        File file = safePath.toFile();
 
-        System.out.println("Đường dẫn đang kiểm tra: " + hardcodedWindowsPath);
+        System.out.println("Đường dẫn đã chuẩn hóa: " + file.getPath());
 
-        // Lệnh này bắt buộc hệ thống phải kiểm tra tệp có tồn tại thực sự không
-        // Kết quả: Windows -> True (Xanh), Ubuntu/macOS -> False (Đỏ)
-        assertTrue(file.exists(), "LỖI: Không tìm thấy tệp tin do sai định dạng đường dẫn trên hệ điều hành này!");
+        // Kiểm tra xem file có tồn tại thực tế không
+        // Lúc này, cả 3 OS đều sẽ tìm thấy file và trả về True ✅
+        assertTrue(file.exists(), "LỖI: Vẫn không tìm thấy file dù đã refactor!");
     }
 }
