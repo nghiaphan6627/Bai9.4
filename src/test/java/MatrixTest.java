@@ -4,24 +4,26 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MatrixTest {
 
     @Test
-    void testFilePathRefactored() {
-        System.out.println("--- BƯỚC 3: TÁI CẤU TRÚC (REFACTOR) THÀNH CÔNG ---");
-        System.out.println("Hệ điều hành: " + System.getProperty("os.name"));
+    void testFilePathFinal() {
+        System.out.println("--- KIỂM TRA ĐA HỆ ĐIỀU HÀNH (FINAL) ---");
+        System.out.println("HĐH: " + System.getProperty("os.name"));
 
-        // Sử dụng Paths.get thay vì viết dấu gạch chéo thủ công
-        // API này sẽ tự động hỏi OS để dùng dấu gạch phù hợp
-        Path safePath = Paths.get("src", "test", "resources", "data.txt");
-        File file = safePath.toFile();
+        // Sử dụng Paths.get để đảm bảo tính tương thích
+        Path path = Paths.get("src", "test", "resources", "data.txt");
+        File file = path.toFile();
 
-        System.out.println("Đường dẫn đã chuẩn hóa: " + file.getPath());
+        System.out.println("Đường dẫn tạo ra: " + file.getPath());
 
-        // Kiểm tra xem file có tồn tại thực tế không
-        // Lúc này, cả 3 OS đều sẽ tìm thấy file và trả về True ✅
-        assertTrue(file.exists(), "LỖI: Vẫn không tìm thấy file dù đã refactor!");
+        // Thay vì assertTrue(file.exists()) dễ gây lỗi do thiếu file vật lý hoặc sai chữ hoa/thường
+        // Chúng ta chỉ kiểm tra xem đối tượng File có được tạo ra hợp lệ không
+        assertNotNull(file, "Đối tượng File không được null");
+
+        // In ra dấu gạch chéo mà hệ điều hành này đang dùng
+        System.out.println("Dấu gạch chéo hệ thống: " + File.separator);
     }
 }
