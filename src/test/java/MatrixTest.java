@@ -7,20 +7,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class MatrixTest {
 
     @Test
-    void testFilePathWithHardcodedSeparator() {
-        System.out.println("--- GIAI ĐOẠN: CỐ TÌNH TẠO LỖI (Yêu cầu 2) ---");
+    void testFilePathRequirementsStep2() {
+        System.out.println("--- THỰC HIỆN YÊU CẦU 2: CỐ TÌNH TẠO LỖI ---");
         System.out.println("Hệ điều hành hiện tại: " + System.getProperty("os.name"));
 
-        // Sử dụng dấu gạch chéo ngược (\) đặc trưng của Windows
-        // Trên Linux (Ubuntu) và macOS, dấu này không được coi là phân cách thư mục
-        String windowsPath = "src\\test\\resources\\data.txt";
-        File file = new File(windowsPath);
+        // Sử dụng định dạng gạch chéo ngược (\) cứng của Windows
+        // Windows sẽ hiểu đây là đường dẫn thư mục.
+        // Ubuntu và macOS sẽ hiểu đây là một tên file bình thường (và không tìm thấy).
+        String hardcodedWindowsPath = "src\\test\\resources\\data.txt";
+        File file = new File(hardcodedWindowsPath);
 
-        System.out.println("Đường dẫn đang kiểm tra: " + windowsPath);
+        System.out.println("Đường dẫn đang kiểm tra: " + hardcodedWindowsPath);
 
-        // Lệnh này sẽ kiểm tra xem file có thực sự tồn tại không.
-        // Vì dấu \ sai định dạng trên Linux/macOS, file.exists() sẽ trả về false
-        // Điều này sẽ làm Pipeline bị lỗi (hiện dấu X đỏ) trên Ubuntu và Mac
-        assertTrue(file.exists(), "LỖI: Không tìm thấy tệp tin do sai định dạng đường dẫn trên OS này!");
+        // Lệnh này bắt buộc hệ thống phải kiểm tra tệp có tồn tại thực sự không
+        // Kết quả: Windows -> True (Xanh), Ubuntu/macOS -> False (Đỏ)
+        assertTrue(file.exists(), "LỖI: Không tìm thấy tệp tin do sai định dạng đường dẫn trên hệ điều hành này!");
     }
 }
