@@ -1,31 +1,26 @@
+package test.java;
+
 import org.junit.jupiter.api.Test;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MatrixTest {
 
     @Test
-    void testFilePath() {
-        // --- GIAI ĐOẠN 1: CỐ TÌNH TẠO LỖI (Sử dụng dấu \ của Windows) ---
-        // Khi chạy trên Ubuntu/macOS trong GitHub Actions, dòng này sẽ gặp vấn đề về logic đường dẫn
+    void testFilePathWithHardcodedSeparator() {
+        System.out.println("--- GIAI ĐOẠN: CỐ TÌNH TẠO LỖI (Yêu cầu 2) ---");
+        System.out.println("Hệ điều hành hiện tại: " + System.getProperty("os.name"));
+
+        // Sử dụng dấu gạch chéo ngược (\) đặc trưng của Windows
+        // Trên Linux (Ubuntu) và macOS, dấu này không được coi là phân cách thư mục
         String windowsPath = "src\\test\\resources\\data.txt";
         File file = new File(windowsPath);
 
-        System.out.println("Đang kiểm tra trên hệ điều hành: " + System.getProperty("os.name"));
-        System.out.println("Đường dẫn đang thử nghiệm: " + file.getPath());
+        System.out.println("Đường dẫn đang kiểm tra: " + windowsPath);
 
-        // --- GIAI ĐOẠN 2: TÁI CẤU TRÚC (REFACTOR) ---
-        // Sau khi bạn thấy pipeline chạy lỗi, hãy comment đoạn trên lại và dùng cách dưới đây:
-        
-        /* 
-        // Cách dùng java.nio.file.Path (Khuyên dùng theo image_99b062.png)
-        Path path = Paths.get("src", "test", "resources", "data.txt");
-        System.out.println("Đường dẫn an toàn: " + path.toString());
-        assertNotNull(path);
-        */
-
-        assertNotNull(file);
+        // Lệnh này sẽ kiểm tra xem file có thực sự tồn tại không.
+        // Vì dấu \ sai định dạng trên Linux/macOS, file.exists() sẽ trả về false
+        // Điều này sẽ làm Pipeline bị lỗi (hiện dấu X đỏ) trên Ubuntu và Mac
+        assertTrue(file.exists(), "LỖI: Không tìm thấy tệp tin do sai định dạng đường dẫn trên OS này!");
     }
 }
